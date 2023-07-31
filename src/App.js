@@ -64,14 +64,17 @@ function Header() {
 }
 
 function Menu() {
+  const numPizzas = pizzaData.length;
+
   return (
     <main className="menu">
       <h2>Our menu</h2>
-      <ul className="pizzas">
-        {pizzaData.map((p) => (
-          <Pizza pizzaObj={p} key={p.name} />
-        ))}
-        {/* {pizzaData.map((p) => (
+      {numPizzas > 0 ? (
+        <ul className="pizzas">
+          {pizzaData.map((p) => (
+            <Pizza pizzaObj={p} key={p.name} />
+          ))}
+          {/* {pizzaData.map((p) => (
           <Pizza
             name={p.name}
             ingredients={p.ingredients}
@@ -80,29 +83,26 @@ function Menu() {
             soldOut={p.soldOut}
           />
         ))} */}
-
-        {/* <Pizza
-          name="Pizza Prosciutto"
-          ingredients="Tomato, mozarella, ham, aragula, and burrata cheese"
-          price="18"
-          photoName="pizzas/prosciutto.jpg"
-          soldOut="false"
-        />*/}
-      </ul>
+        </ul>
+      ) : (
+        <p>We're still working on our menu. Please come back later.</p>
+      )}
     </main>
   );
 }
 
-function Pizza(props) {
+// вместо props, мы получаем сразу объект
+function Pizza({ pizzaObj }) {
+  // если пицу распродали, то она не отображается
+  // if (props.pizzaObj.soldOut) return null;
+
   return (
-    <li className={!props.pizzaObj.soldOut ? "pizza" : "pizza sold-out"}>
-      <img src={props.pizzaObj.photoName} alt={props.pizzaObj.name} />
+    <li className={!pizzaObj.soldOut ? "pizza" : "pizza sold-out"}>
+      <img src={pizzaObj.photoName} alt={pizzaObj.name} />
       <div>
-        <h3>{props.pizzaObj.name}</h3>
-        <p>{props.pizzaObj.ingredients}</p>
-        <span>
-          {!props.pizzaObj.soldOut ? props.pizzaObj.price : "soldOut"}
-        </span>
+        <h3>{pizzaObj.name}</h3>
+        <p>{pizzaObj.ingredients}</p>
+        <span>{!pizzaObj.soldOut ? pizzaObj.price : "soldOut"}</span>
       </div>
     </li>
   );
@@ -119,11 +119,34 @@ function Footer() {
 
   return (
     <footer className="footer">
-      {new Date().toLocaleTimeString()}.{" "}
-      {isOpen ? "We're currently open" : "Sorry, we're closed"}
+      {/* {new Date().toLocaleTimeString()}.{" "}
+      {isOpen ? "We're currently open" : "Sorry, we're closed"} */}
+
+      {/* {isOpen && (
+        <div className="order">
+          <p>We're open until {closeHour}:00. Come visit us or order online.</p>
+          <button className="btn">Order</button>
+        </div>
+      )} */}
+      {isOpen ? (
+        <Order closeHour={closeHour} />
+      ) : (
+        <p>
+          We're happy to welcome you between {openHour}:00 and {closeHour}:00.
+        </p>
+      )}
     </footer>
   );
 }
 
+function Order({ closeHour }) {
+  return (
+    <div className="order">
+      <p>We're open until {closeHour}:00. Come visit us or order online.</p>
+      <button className="btn">Order</button>
+    </div>
+  );
+}
+
 // D:\Из Торрента\The Ultimate React Course 2023 React, Redux & More\5. Working With Components, Props, and JSX
-// 47  Conditional Rendering With &&.mkv
+// 52  React Fragments.mkv
