@@ -148,6 +148,3 @@ function Order({ closeHour }) {
     </div>
   );
 }
-
-// D:\Из Торрента\The Ultimate React Course 2023 React, Redux & More\5. Working With Components, Props, and JSX
-// 52  React Fragments.mkv
