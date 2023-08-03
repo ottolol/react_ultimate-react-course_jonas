@@ -87,7 +87,3 @@ function Skill({ skill, level, color }) {
     </div>
   );
 }
-
-// D:\Из Торрента\The Ultimate React Course 2023 React, Redux & More\5. Working With Components, Props, and JSX
-// 55  CHALLENGE #2 Profile Card v2.mkv
-// 3:42

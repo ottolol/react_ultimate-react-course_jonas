@@ -1,93 +1,61 @@
+import { useState } from "react";
 import "./style.css";
 
-const skills = [
-  {
-    skill: "HTML+CSS",
-    level: "💪",
-    color: "#2662EA",
-  },
-  {
-    skill: "JavaScript",
-    level: "💪",
-    color: "#EFD81D",
-  },
-  {
-    skill: "Web Design",
-    level: "💪",
-    color: "#C3DCAF",
-  },
-  {
-    skill: "Git and GitHub",
-    level: "👍",
-    color: "#E84F33",
-  },
-  {
-    skill: "React",
-    level: "💪",
-    color: "#60DAFB",
-  },
-  {
-    skill: "Svelte",
-    level: "👶",
-    color: "#FF3B00",
-  },
+const messages = [
+  "Learn React ⚛️",
+  "Apply for jobs 💼",
+  "Invest your new income 🤑",
 ];
 
 export default function App() {
+  const [step, setStep] = useState(1);
+  const hasPrev = step > 1;
+  const hasNext = step < messages.length;
+
+  function handlePrevClick() {
+    hasPrev ? setStep(step - 1) : setStep(1);
+  }
+
+  function handleNextClick() {
+    hasNext ? setStep(step + 1) : setStep(messages.length);
+  }
+
   return (
-    <div className="card">
-      <Avatar />
-      <div className="data">
-        <Intro />
-        {/* Should contain one Skill component
-        for each web dev skill that you have,
-        customized with props */}
-        <SkillList />
+    <div className="steps">
+      <div className="numbers">
+        {/* <div className={`${step === 1 ? "active" : ""}`}>1</div>
+        <div className={`${step === 2 ? "active" : ""}`}>2</div>
+        <div className={`${step === 3 ? "active" : ""}`}>3</div> */}
+        <div className={step === 1 && "active"}>1</div>
+        <div className={step === 2 && "active"}>2</div>
+        <div className={step === 3 && "active"}>3</div>
+      </div>
+
+      <p className="message">
+        Step {step} : {messages[step - 1]}
+      </p>
+
+      <div className="buttons">
+        <button
+          disabled={!hasPrev}
+          onClick={handlePrevClick}
+          // onClick={() => setStep(step < 0 ? step - 1 : null)}
+          // style={{ backgroundColor: "#7950f2", color: "#fff" }}
+        >
+          Previous
+        </button>
+        <button
+          disabled={!hasNext}
+          onClick={handleNextClick}
+          // onClick={() => setStep(step + 1)}
+          // style={{ backgroundColor: "#7950f2", color: "#fff" }}
+        >
+          Next
+        </button>
       </div>
     </div>
   );
 }
 
-function Avatar() {
-  return <img className="avatar" src="./avatar.jpg" alt="Alex West" />;
-}
-
-function Intro() {
-  return (
-    <div>
-      <h1>Aleksey Sveshnikov</h1>
-      <p>
-        While web development typically refers to web markup and coding, website
-        development includes all related development tasks, such as client-side
-        scripting, server-side scripting, server and network security
-        configuration.
-      </p>
-    </div>
-  );
-}
-
-function SkillList() {
-  return (
-    <div className="skill-list">
-      {skills.map((s) => (
-        // <Skill skillObj={s} key={s.skill} /> - пример передачи сразу всего объекта
-        <Skill skill={s.skill} level={s.level} color={s.color} key={s.skill} />
-      ))}
-    </div>
-  );
-}
-
-// function Skill({ skillObj }) {} - пример передачи сразу всего объекта
-// при такой записи, понятно какие параметры передаются. Нежели если бы мы передали целый объект как в примере lesson03-_pizza
-function Skill({ skill, level, color }) {
-  return (
-    <div className="skill" style={{ backgroundColor: color }}>
-      <span>{skill}</span>
-      <span>{level}</span>
-    </div>
-  );
-}
-
-// D:\Из Торрента\The Ultimate React Course 2023 React, Redux & More\5. Working With Components, Props, and JSX
-// 55  CHALLENGE #2 Profile Card v2.mkv
-// 3:42
+// D:\Из Торрента\The Ultimate React Course 2023 React, Redux & More\6. State, Events, and Forms Interactive Components
+// 58  Handling Events the React Way.mkv
