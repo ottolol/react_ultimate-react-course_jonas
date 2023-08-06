@@ -73,6 +73,3 @@ export default function App() {
     </>
   );
 }
-
-// D:\Из Торрента\The Ultimate React Course 2023 React, Redux & More\6. State, Events, and Forms Interactive Components
-// 63  Adding Another Piece of State.mkv
