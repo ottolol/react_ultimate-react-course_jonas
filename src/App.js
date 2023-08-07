@@ -1,50 +1,78 @@
-import { useState } from "react";
 import "./style.css";
 
+const initialItems = [
+  { id: 1, description: "Passports", quantity: 2, packed: false },
+  { id: 2, description: "Socks", quantity: 12, packed: true },
+];
+
 export default function App() {
-  const [step, setStep] = useState(1);
-  const [count, setCount] = useState(0);
+  return (
+    <div className="App">
+      <Logo />
+      <Form />
+      <PackingList />
+      <Stats />
+    </div>
+  );
+}
 
-  const date = new Date("june 21 2027");
-  date.setDate(date.getDate() + count);
+function Logo() {
+  return <h1>🏝️ Far Away 🧳</h1>;
+}
 
-  function handlerStepPlusClick() {
-    setStep((s) => s + 1);
-  }
-
-  function handlerStepMinusClick() {
-    setStep((s) => s - 1);
-  }
-
-  function handlerCountPlusClick() {
-    setCount((c) => c + step);
-  }
-
-  function handlerCountMinusClick() {
-    setCount((c) => c - step);
+function Form() {
+  function handleSubmit(e) {
+    e.preventDefault();
   }
 
   return (
-    <>
-      <div className="message">
-        <div>
-          <button onClick={handlerStepMinusClick}>-</button>Step: {step}
-          <button onClick={handlerStepPlusClick}>+</button>
-        </div>
-        <div>
-          <button onClick={handlerCountMinusClick}>-</button>Count: {count}
-          <button onClick={handlerCountPlusClick}>+</button>
-        </div>
-
-        <span>
-          {count === 0
-            ? "Today is "
-            : count > 0
-            ? `${count} days from today is `
-            : `${Math.abs(count)} days ago was today is `}
-        </span>
-        <span>{date.toDateString()}</span>
-      </div>
-    </>
+    <form className="add-form" onSubmit={handleSubmit}>
+      <h3>What do you need for your trip?</h3>
+      <select>
+        {/* <option value={1}>1</option> */}
+        {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => (
+          <option value={num} key={num}>
+            {num}
+          </option>
+        ))}
+      </select>
+      <input type="text" placeholder="Item..." />
+      <button>Add</button>
+    </form>
   );
 }
+
+function PackingList() {
+  return (
+    <div className="list">
+      <ul>
+        {initialItems.map((item) => (
+          <Item item={item} key={item.id} />
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function Item({ item }) {
+  return (
+    <li>
+      <input type="checkbox"></input>
+      <span style={item.packed ? { textDecoration: "line-through" } : {}}>
+        {item.quantity} {item.description}
+      </span>
+      <button>❌</button>
+    </li>
+  );
+}
+
+function Stats() {
+  return (
+    <footer className="stats">
+      <em>💼 You have X item on your list, and you already packed X (x%)</em>
+    </footer>
+  );
+}
+
+// D:\Из Торрента\The Ultimate React Course 2023 React, Redux & More\6. State, Events, and Forms Interactive Components
+// 73  Controlled Element
