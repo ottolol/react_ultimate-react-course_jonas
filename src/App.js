@@ -1,69 +1,75 @@
 import { useState } from "react";
 import "./style.css";
 
-const questions = [
-  {
-    id: 3457,
-    question: "What language is React based on?",
-    answer: "JavaScript",
-  },
-  {
-    id: 7336,
-    question: "What are the building blocks of React apps?",
-    answer: "Components",
-  },
-  {
-    id: 8832,
-    question: "What's the name of the syntax we use to describe a UI in React?",
-    answer: "JSX",
-  },
-  {
-    id: 1297,
-    question: "How to pass data from parent to child components?",
-    answer: "Props",
-  },
-  {
-    id: 9103,
-    question: "How to give components memory?",
-    answer: "useState hook",
-  },
-  {
-    id: 2002,
-    question:
-      "What do we call an input element that is completely synchronised with state?",
-    answer: "Controlled element",
-  },
-];
-
 export default function App() {
   return (
     <div className="App">
-      <FlashCards />
+      <Counter />
     </div>
   );
 }
 
-function FlashCards() {
-  const [selectedId, setSelectedId] = useState(null);
+function Counter() {
+  const [count, setCount] = useState(0);
 
-  function handleCardClick(id) {
-    setSelectedId(id !== selectedId ? id : null);
+  const date = new Date("june 21 2027");
+  date.setDate(date.getDate() + count);
+
+  // Step: input type="range"
+  const start = 1;
+  const end = 10;
+  const [step, setStep] = useState(start);
+
+  function changeRange(e) {
+    setStep(Number(e.target.value));
+  }
+
+  function changeCount(e) {
+    setCount(Number(e.target.value));
+  }
+
+  const showReset = step > 1 || count > 0 || count < 0;
+
+  function resetCountAndStep() {
+    setCount(0);
+    setStep(1);
   }
 
   return (
-    <div className="flashcards">
-      {questions.map((q) => (
-        <div
-          key={q.id}
-          onClick={() => handleCardClick(q.id)}
-          className={selectedId !== q.id ? "" : "selected"}
-        >
-          {selectedId === q.id ? q.answer : q.question}
+    <div>
+      <div>
+        <input
+          type="range"
+          min={start}
+          max={end}
+          value={step}
+          onChange={changeRange}
+        />
+        <span>Step: {step}</span>
+      </div>
+
+      <div>
+        <button onClick={() => setCount((c) => c - step)}>-</button>
+        <input value={count} onChange={changeCount} />
+        <button onClick={() => setCount((c) => c + step)}>+</button>
+      </div>
+
+      <p>
+        <span>
+          {count === 0
+            ? "Today is "
+            : count > 0
+            ? `${count} days from today is `
+            : `${Math.abs(count)} days ago was `}
+        </span>
+        <span>{date.toDateString()}</span>
+      </p>
+
+      {showReset && (
+        <div>
+          <button onClick={resetCountAndStep}>Reset</button>
         </div>
-      ))}
+      )}
     </div>
   );
 }
-
-// D:\Из Торрента\The Ultimate React Course 2023 React, Redux & More\6. State, Events, and Forms Interactive Components
-// 75  EXERCISE #1 Flashcards
