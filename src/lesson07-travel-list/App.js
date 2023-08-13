@@ -1,18 +1,43 @@
 import { useState } from "react";
 import "./style.css";
 
-const initialItems = [
-  { id: 1, description: "Passports", quantity: 2, packed: false },
-  { id: 2, description: "Socks", quantity: 12, packed: true },
-];
+// const initialItems = [
+//   { id: 1, description: "Passports", quantity: 2, packed: false },
+//   { id: 2, description: "Socks", quantity: 12, packed: true },
+// ];
 
 export default function App() {
+  const [items, setItems] = useState([]);
+
+  // функция добавления item в массив items
+  function handleAddItems(item) {
+    setItems((items) => [...items, item]);
+  }
+
+  // функция удаления item из массива items
+  function handleDeleteItem(id) {
+    setItems((items) => items.filter((item) => item.id !== id));
+  }
+
+  // функция смены состояния input галочка, или не галочка
+  function handleToggleItem(id) {
+    setItems((items) =>
+      items.map((item) =>
+        item.id === id ? { ...item, packed: !item.packed } : item
+      )
+    );
+  }
+
   return (
     <div className="App">
       <Logo />
-      <Form />
-      <PackingList />
-      <Stats />
+      <Form onAddItems={handleAddItems} />
+      <PackingList
+        items={items}
+        onDeleteItem={handleDeleteItem}
+        onToggleItem={handleToggleItem}
+      />
+      <Stats items={items} />
     </div>
   );
 }
@@ -21,7 +46,7 @@ function Logo() {
   return <h1>🏝️ Far Away 🧳</h1>;
 }
 
-function Form() {
+function Form({ onAddItems }) {
   const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState(1);
 
@@ -31,7 +56,8 @@ function Form() {
     if (!description) return;
 
     const newItem = { description, quantity, packed: false, id: Date.now() };
-    console.log(newItem);
+
+    onAddItems(newItem);
 
     setDescription("");
     setQuantity(1);
@@ -62,37 +88,62 @@ function Form() {
   );
 }
 
-function PackingList() {
+function PackingList({ items, onDeleteItem, onToggleItem }) {
   return (
     <div className="list">
       <ul>
-        {initialItems.map((item) => (
-          <Item item={item} key={item.id} />
+        {items.map((item) => (
+          <Item
+            item={item}
+            key={item.id}
+            onDeleteItem={onDeleteItem}
+            onToggleItem={onToggleItem}
+          />
         ))}
       </ul>
     </div>
   );
 }
 
-function Item({ item }) {
+function Item({ item, onDeleteItem, onToggleItem }) {
   return (
     <li>
-      <input type="checkbox"></input>
+      <input
+        type="checkbox"
+        value={item.packed}
+        onChange={() => onToggleItem(item.id)}
+      />
       <span style={item.packed ? { textDecoration: "line-through" } : {}}>
         {item.quantity} {item.description}
       </span>
-      <button>❌</button>
+      <button onClick={() => onDeleteItem(item.id)}>❌</button>
     </li>
   );
 }
 
-function Stats() {
+function Stats({ items }) {
+  if (!items.length)
+    return (
+      <p className="stats">
+        <em>Start adding some items to your packing list 🚀</em>
+      </p>
+    );
+
+  const numItems = items.length;
+  const numPackedItems = items.filter((item) => item.packed).length;
+  const percentage = Math.round((numPackedItems / numItems) * 100);
+
   return (
     <footer className="stats">
-      <em>💼 You have X item on your list, and you already packed X (x%)</em>
+      <em>
+        {percentage === 100
+          ? "You got everything! Ready to go ✈"
+          : `💼 You have ${numItems} item on your list, and you already packed
+        ${numPackedItems} (${percentage}%)`}
+      </em>
     </footer>
   );
 }
 
-// D:\Из Торрента\The Ultimate React Course 2023 React, Redux & More\6. State, Events, and Forms Interactive Components
-// 73  Controlled Element
+// D:\Из Торрента\The Ultimate React Course 2023 React, Redux & More\7. Thinking In React State Management
+// 86  Sorting Items
