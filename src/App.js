@@ -28,6 +28,16 @@ export default function App() {
     );
   }
 
+  // функция очистки всего списка items
+  function handleClearList() {
+    // подтверждение удаления для пользователя
+    const confirmed = window.confirm(
+      "Are you sure you want ot delete all items?"
+    );
+
+    if (confirmed) setItems([]);
+  }
+
   return (
     <div className="App">
       <Logo />
@@ -36,6 +46,7 @@ export default function App() {
         items={items}
         onDeleteItem={handleDeleteItem}
         onToggleItem={handleToggleItem}
+        onClearList={handleClearList}
       />
       <Stats items={items} />
     </div>
@@ -88,7 +99,7 @@ function Form({ onAddItems }) {
   );
 }
 
-function PackingList({ items, onDeleteItem, onToggleItem }) {
+function PackingList({ items, onDeleteItem, onToggleItem, onClearList }) {
   // filter <div className="actions">
   const [sortBy, setSortBy] = useState("input");
 
@@ -127,6 +138,7 @@ function PackingList({ items, onDeleteItem, onToggleItem }) {
           <option value="description">Sort by description</option>
           <option value="packed">Sort by packed status</option>
         </select>
+        <button onClick={onClearList}>Clear list</button>
       </div>
     </div>
   );
@@ -173,4 +185,4 @@ function Stats({ items }) {
 }
 
 // D:\Из Торрента\The Ultimate React Course 2023 React, Redux & More\7. Thinking In React State Management
-// 86  Sorting Items
+// 87  Clearing the List
