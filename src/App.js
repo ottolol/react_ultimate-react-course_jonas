@@ -1,55 +1,124 @@
 import { useState } from "react";
 import "./style.css";
 
-const faqs = [
-  {
-    title: "Where are these chairs assembled?",
-    text: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Accusantium, quaerat temporibus quas dolore provident nisi ut aliquid ratione beatae sequi aspernatur veniam repellendus.",
-  },
-  {
-    title: "How long do I have to return my chair?",
-    text: "Pariatur recusandae dignissimos fuga voluptas unde optio nesciunt commodi beatae, explicabo natus.",
-  },
-  {
-    title: "Do you ship to countries outside the EU?",
-    text: "Excepturi velit laborum, perspiciatis nemo perferendis reiciendis aliquam possimus dolor sed! Dolore laborum ducimus veritatis facere molestias!",
-  },
+const messages = [
+  "Learn React ⚛️",
+  "Apply for jobs 💼",
+  "Invest your new income 🤑",
 ];
 
 export default function App() {
   return (
     <div>
-      <Accordion data={faqs} />
+      <Steps />
+      <StepMessage step={1}>
+        <p>Pass in content</p>
+        <p>👍</p>
+      </StepMessage>
+      <StepMessage step={2}>
+        <p>Read children prop</p>
+        <p>🤣</p>
+      </StepMessage>
     </div>
   );
 }
 
-function Accordion({ data }) {
-  return (
-    <div className="accordion">
-      {data.map((el, i) => (
-        <AccordionItem num={i} title={el.title} text={el.text} key={el.title} />
-      ))}
-    </div>
-  );
-}
+function Steps() {
+  const [step, setStep] = useState(1);
+  const [isOpen, setIsOpen] = useState(true);
 
-function AccordionItem({ num, title, text }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const hasPrev = step > 1;
+  const hasNext = step < messages.length;
 
-  function handleToggle() {
-    setIsOpen((isOpen) => !isOpen);
+  function handlePrevClick() {
+    hasPrev && setStep((s) => s - 1);
+  }
+
+  function handleNextClick() {
+    hasNext && setStep((s) => s + 1);
+  }
+
+  function handleCloseClick() {
+    setIsOpen((is) => !is);
   }
 
   return (
-    // <div className={!isOpen ? "item" : "item open"} onClick={handleToggle}>
-    <div className={`item ${isOpen ? "open" : ""}`} onClick={handleToggle}>
-      {/* <span className="number">{ix < 9 ? "0" + (ix + 1) : ix + 1}</span> */}
-      <p className="number">{num < 9 ? `0${num + 1}` : num + 1}</p>
-      <p className="title">{title}</p>
-      <p className="icon">{isOpen ? "-" : "+"}</p>
+    <div>
+      <button className="close" onClick={handleCloseClick}>
+        &times;
+      </button>
 
-      {isOpen && <div className="content-box">{text}</div>}
+      {isOpen && (
+        <div className="steps">
+          <div className="numbers">
+            <div className={step === 1 ? "active" : ""}>1</div>
+            <div className={step === 2 ? "active" : ""}>2</div>
+            <div className={step === 3 ? "active" : ""}>3</div>
+          </div>
+
+          {/* <p className="message">
+            Step {step} : {messages[step - 1]}
+          </p> */}
+          <StepMessage step={step}>
+            {messages[step - 1]}
+            <div className="buttons">
+              <button
+                bgColor="#e7e7e7"
+                textColor="#333"
+                onClick={() => alert(`Learn ho to ${messages[step - 1]}`)}
+              >
+                Learn how
+              </button>
+            </div>
+          </StepMessage>
+
+          <div className="buttons">
+            <Button
+              onClick={handlePrevClick}
+              has={!hasPrev}
+              textColor={!hasPrev ? "" : "#fff"}
+              bgColor={!hasPrev ? "" : "#7950f2"}
+            >
+              <span>👈</span>Previous
+            </Button>
+            <Button
+              onClick={handleNextClick}
+              has={!hasNext}
+              textColor={!hasNext ? "" : "#fff"}
+              bgColor={!hasNext ? "" : "#7950f2"}
+            >
+              <span>👉</span>Next
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+
+function StepMessage({ step, children }) {
+  return (
+    <div className="message">
+      <h3>Step {step}</h3>
+      {children}
+    </div>
+  );
+}
+
+function Button({ textColor, bgColor, has, onClick, children }) {
+  // children это пропс, который выводит значение между тегами <button>Значение</button>
+  // D:\Из Торрента\The Ultimate React Course 2023 React, Redux & More\7. Thinking In React State Management
+  // 90 The children Prop Making a Reusable Button - 13:00
+  return (
+    <button
+      style={{ color: textColor, backgroundColor: bgColor }}
+      disabled={has}
+      onClick={onClick}
+    >
+      {children}
+    </button>
+  );
+}
+
+// D:\Из Торрента\The Ultimate React Course 2023 React, Redux & More\7. Thinking In React State Management
+// 90  The children Prop Making a Reusable Button
