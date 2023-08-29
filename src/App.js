@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./style.css";
+
 const data = [
   {
     id: 1,
@@ -46,55 +47,69 @@ const data = [
 ];
 
 export default function App() {
+  const [movies, setMovies] = useState(data);
   const [showMovieDescription, setShowMovieDescription] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
 
-  function handleMovieListClick() {
-    setShowMovieDescription((show) => !show);
+  function handleMovieSelection(movie) {
+    setSelectedMovie((cur) => (cur?.id === movie.id ? null : movie));
   }
 
   return (
     <div className="app">
       <div className="sidebar">
-        <MovieList handleMovieListClick={handleMovieListClick} />
+        <MovieList movies={movies} onSelection={handleMovieSelection} />
       </div>
-      <MakeOrder showMovieDescription={showMovieDescription} />
+      <MakeOrder
+        showMovieDescription={showMovieDescription}
+        selectedMovie={selectedMovie}
+      />
     </div>
   );
 }
 
-function MovieList({ handleMovieListClick }) {
+function MovieList({ movies, selectedMovie, onSelection }) {
   return (
     <ul>
-      {data.map((d) => (
-        <li>
-          <img src={d.img} alt={d.name} />
-          <h3>{d.name}</h3>
-          <p>Price: {d.price} $</p>
-          <button className="button" onClick={handleMovieListClick}>
-            More
-          </button>
-        </li>
+      {movies.map((movie) => (
+        <Movie
+          movie={movie}
+          key={movie.id}
+          selectedMovie={selectedMovie}
+          onSelection={onSelection}
+        />
       ))}
     </ul>
   );
 }
 
-function MakeOrder({ showMovieDescription }) {
+function Movie({ movie, onSelection }) {
   return (
-    showMovieDescription && (
+    <li>
+      <img src={movie.img} alt={movie.name} />
+      <h3>{movie.name}</h3>
+      <p>Price: {movie.price} $</p>
+      <button className="button" onClick={() => onSelection(movie)}>
+        More
+      </button>
+    </li>
+  );
+}
+
+function MakeOrder({ selectedMovie }) {
+  return (
+    selectedMovie && (
       <form className="form-make-order">
-        <h2>Make order - name of Movie</h2>
+        <h2>Make order - {selectedMovie.name}</h2>
         <p>Description</p>
-        <p>Year</p>
-        <p>
-          Barbie is a 2023 American fantasy comedy film directed by Greta Gerwig
-          from a screenplay she wrote with Noah Baumbach.
-        </p>
-        <p>2023</p>
+        <p>{selectedMovie.description}</p>
         <label>Ticket's price</label>
-        <input type="text" value="10" />
+        <input type="text" value={selectedMovie.price} />
+        <button className="button">Order</button>
       </form>
     )
   );
 }
+
+// D:\Из Торрента\The Ultimate React Course 2023 React, Redux & More\8. [Optional] Practice Project Eat-'N-Split
+// посмотреть 100-й видос, там он передает данные в дочерний компонент
