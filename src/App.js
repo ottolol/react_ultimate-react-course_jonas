@@ -50,19 +50,35 @@ export default function App() {
   const [movies, setMovies] = useState(data);
   const [showMovieDescription, setShowMovieDescription] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
+  const [order, setOrder] = useState(false);
 
   function handleMovieSelection(movie) {
     setSelectedMovie((cur) => (cur?.id === movie.id ? null : movie));
   }
 
+  function handleMakeOrded(value) {
+    setMovies((movies) =>
+      movies.map((movie) =>
+        movie.id === selectedMovie.id
+          ? { ...movies, balance: movie.balance + value }
+          : movie
+      )
+    );
+  }
+
   return (
     <div className="app">
       <div className="sidebar">
-        <MovieList movies={movies} onSelection={handleMovieSelection} />
+        <MovieList
+          movies={movies}
+          onSelection={handleMovieSelection}
+          selectedMovie={selectedMovie}
+        />
       </div>
       <MakeOrder
         showMovieDescription={showMovieDescription}
         selectedMovie={selectedMovie}
+        setOrder={setOrder}
       />
     </div>
   );
@@ -83,23 +99,31 @@ function MovieList({ movies, selectedMovie, onSelection }) {
   );
 }
 
-function Movie({ movie, onSelection }) {
+function Movie({ movie, onSelection, selectedMovie, order }) {
+  const isSelected = selectedMovie?.id === movie.id;
+
   return (
-    <li>
+    <li className={isSelected ? "selected" : ""}>
       <img src={movie.img} alt={movie.name} />
       <h3>{movie.name}</h3>
       <p>Price: {movie.price} $</p>
       <button className="button" onClick={() => onSelection(movie)}>
-        More
+        {isSelected ? "Close" : "More"}
       </button>
     </li>
   );
 }
 
-function MakeOrder({ selectedMovie }) {
+function MakeOrder({ selectedMovie, setOrder }) {
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    setOrder((o) => o);
+  }
+
   return (
     selectedMovie && (
-      <form className="form-make-order">
+      <form className="form-make-order" onSubmit={handleSubmit}>
         <h2>Make order - {selectedMovie.name}</h2>
         <p>Description</p>
         <p>{selectedMovie.description}</p>
