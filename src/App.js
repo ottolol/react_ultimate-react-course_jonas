@@ -7,7 +7,8 @@ const data = [
     name: "Barbie",
     img: "https://www.gamespot.com/a/uploads/scale_medium/1597/15976769/4121663-margot.jpg",
     description: "The Barbie movie",
-    price: "25",
+    balance: 40,
+    price: 25,
   },
   {
     id: 2,
@@ -50,7 +51,6 @@ export default function App() {
   const [movies, setMovies] = useState(data);
   const [showMovieDescription, setShowMovieDescription] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
-  const [order, setOrder] = useState(false);
 
   function handleMovieSelection(movie) {
     setSelectedMovie((cur) => (cur?.id === movie.id ? null : movie));
@@ -60,7 +60,7 @@ export default function App() {
     setMovies((movies) =>
       movies.map((movie) =>
         movie.id === selectedMovie.id
-          ? { ...movies, balance: movie.balance + value }
+          ? { ...movies, balance: movie.price + value }
           : movie
       )
     );
@@ -78,7 +78,7 @@ export default function App() {
       <MakeOrder
         showMovieDescription={showMovieDescription}
         selectedMovie={selectedMovie}
-        setOrder={setOrder}
+        onMakeOrder={handleMakeOrded}
       />
     </div>
   );
@@ -106,7 +106,7 @@ function Movie({ movie, onSelection, selectedMovie, order }) {
     <li className={isSelected ? "selected" : ""}>
       <img src={movie.img} alt={movie.name} />
       <h3>{movie.name}</h3>
-      <p>Price: {movie.price} $</p>
+      <p>Balance: {movie.balance} $</p>
       <button className="button" onClick={() => onSelection(movie)}>
         {isSelected ? "Close" : "More"}
       </button>
@@ -114,11 +114,11 @@ function Movie({ movie, onSelection, selectedMovie, order }) {
   );
 }
 
-function MakeOrder({ selectedMovie, setOrder }) {
+function MakeOrder({ selectedMovie, onMakeOrder }) {
   function handleSubmit(e) {
     e.preventDefault();
 
-    setOrder((o) => o);
+    onMakeOrder(e.value);
   }
 
   return (
