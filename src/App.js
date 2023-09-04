@@ -1,139 +1,185 @@
 import { useState } from "react";
 import "./style.css";
 
-const data = [
+const tempMovieData = [
   {
-    id: 1,
-    name: "Barbie",
-    img: "https://www.gamespot.com/a/uploads/scale_medium/1597/15976769/4121663-margot.jpg",
-    description: "The Barbie movie",
-    balance: 40,
-    price: 25,
+    imdbID: "tt1375666",
+    Title: "Inception",
+    Year: "2010",
+    Poster:
+      "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg",
   },
   {
-    id: 2,
-    name: "Gran Turismo",
-    img: "https://upload.wikimedia.org/wikipedia/ru/thumb/2/20/GranTurismoMoviePoster.jpeg/800px-GranTurismoMoviePoster.jpeg",
-    description: "Gran Turismo movie",
-    price: "10",
+    imdbID: "tt0133093",
+    Title: "The Matrix",
+    Year: "1999",
+    Poster:
+      "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg",
   },
   {
-    id: 3,
-    name: "Oppenheimer",
-    img: "https://m.media-amazon.com/images/M/MV5BMDBmYTZjNjUtN2M1MS00MTQ2LTk2ODgtNzc2M2QyZGE5NTVjXkEyXkFqcGdeQXVyNzAwMjU2MTY@._V1_.jpg",
-    description: "Oppenheimer movie",
-    price: "15",
-  },
-  {
-    id: 4,
-    name: "Blue Beetle",
-    img: "https://m.media-amazon.com/images/M/MV5BODkyZjcyOGMtZWVhYy00ZWEyLWJlZDItZDA2OTBhNGZmMjBiXkEyXkFqcGdeQXVyMTUzMTg2ODkz._V1_.jpg",
-    description: "Blue Beetle movie",
-    price: "20",
-  },
-  {
-    id: 5,
-    name: "Transformers",
-    img: "https://images-na.ssl-images-amazon.com/images/S/pv-target-images/61e42a9b98294388a0142982723ecb503570de21f0a673af076b6d68ba88d8e9._RI_TTW_.jpg",
-    description: "Transformers movie",
-    price: "16",
-  },
-  {
-    id: 6,
-    name: "Mission Impossible",
-    img: "https://m.media-amazon.com/images/M/MV5BYzFiZjc1YzctMDY3Zi00NGE5LTlmNWEtN2Q3OWFjYjY1NGM2XkEyXkFqcGdeQXVyMTUyMTUzNjQ0._V1_FMjpg_UX1000_.jpg",
-    description: "Mission Impossible movie",
-    price: "12",
+    imdbID: "tt6751668",
+    Title: "Parasite",
+    Year: "2019",
+    Poster:
+      "https://m.media-amazon.com/images/M/MV5BYWZjMjk3ZTItODQ2ZC00NTY5LWE0ZDYtZTI3MjcwN2Q5NTVkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_SX300.jpg",
   },
 ];
 
-export default function App() {
-  const [movies, setMovies] = useState(data);
-  const [showMovieDescription, setShowMovieDescription] = useState(false);
-  const [selectedMovie, setSelectedMovie] = useState(null);
+const tempWatchedData = [
+  {
+    imdbID: "tt1375666",
+    Title: "Inception",
+    Year: "2010",
+    Poster:
+      "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg",
+    runtime: 148,
+    imdbRating: 8.8,
+    userRating: 10,
+  },
+  {
+    imdbID: "tt0088763",
+    Title: "Back to the Future",
+    Year: "1985",
+    Poster:
+      "https://m.media-amazon.com/images/M/MV5BZmU0M2Y1OGUtZjIxNi00ZjBkLTg1MjgtOWIyNThiZWIwYjRiXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg",
+    runtime: 116,
+    imdbRating: 8.5,
+    userRating: 9,
+  },
+];
 
-  function handleMovieSelection(movie) {
-    setSelectedMovie((cur) => (cur?.id === movie.id ? null : movie));
-  }
+const average = (arr) =>
+  arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
-  function handleMakeOrded(value) {
-    setMovies((movies) =>
-      movies.map((movie) =>
-        movie.id === selectedMovie.id
-          ? { ...movies, balance: movie.price + value }
-          : movie
-      )
-    );
-  }
+export default function App({ movies }) {
+  return (
+    <>
+      <NavBar movies={movies} />
+      <Main />
+    </>
+  );
+}
+
+function NavBar({ movies }) {
+  const [query, setQuery] = useState("");
 
   return (
-    <div className="app">
-      <div className="sidebar">
-        <MovieList
-          movies={movies}
-          onSelection={handleMovieSelection}
-          selectedMovie={selectedMovie}
-        />
+    <nav className="nav-bar">
+      <div className="logo">
+        <span role="img">🍿</span>
+        <h1>usePopcorn</h1>
       </div>
-      <MakeOrder
-        showMovieDescription={showMovieDescription}
-        selectedMovie={selectedMovie}
-        onMakeOrder={handleMakeOrded}
+      <input
+        className="search"
+        type="text"
+        placeholder="Search movies..."
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
       />
-    </div>
+      <p className="num-results">
+        Found <strong>{movies.length}</strong> results
+      </p>
+    </nav>
   );
 }
 
-function MovieList({ movies, selectedMovie, onSelection }) {
-  return (
-    <ul>
-      {movies.map((movie) => (
-        <Movie
-          movie={movie}
-          key={movie.id}
-          selectedMovie={selectedMovie}
-          onSelection={onSelection}
-        />
-      ))}
-    </ul>
-  );
-}
+function Main() {
+  const [movies, setMovies] = useState(tempMovieData);
+  const [watched, setWatched] = useState(tempWatchedData);
+  const [isOpen1, setIsOpen1] = useState(true);
+  const [isOpen2, setIsOpen2] = useState(true);
 
-function Movie({ movie, onSelection, selectedMovie, order }) {
-  const isSelected = selectedMovie?.id === movie.id;
+  const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
+  const avgUserRating = average(watched.map((movie) => movie.userRating));
+  const avgRuntime = average(watched.map((movie) => movie.runtime));
 
   return (
-    <li className={isSelected ? "selected" : ""}>
-      <img src={movie.img} alt={movie.name} />
-      <h3>{movie.name}</h3>
-      <p>Balance: {movie.balance} $</p>
-      <button className="button" onClick={() => onSelection(movie)}>
-        {isSelected ? "Close" : "More"}
-      </button>
-    </li>
+    <main className="main">
+      <div className="box">
+        <button
+          className="btn-toggle"
+          onClick={() => setIsOpen1((open) => !open)}
+        >
+          {isOpen1 ? "–" : "+"}
+        </button>
+        {isOpen1 && (
+          <ul className="list">
+            {movies?.map((movie) => (
+              <li key={movie.imdbID}>
+                <img src={movie.Poster} alt={`${movie.Title} poster`} />
+                <h3>{movie.Title}</h3>
+                <div>
+                  <p>
+                    <span>🗓</span>
+                    <span>{movie.Year}</span>
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      <div className="box">
+        <button
+          className="btn-toggle"
+          onClick={() => setIsOpen2((open) => !open)}
+        >
+          {isOpen2 ? "–" : "+"}
+        </button>
+        {isOpen2 && (
+          <>
+            <div className="summary">
+              <h2>Movies you watched</h2>
+              <div>
+                <p>
+                  <span>#️⃣</span>
+                  <span>{watched.length} movies</span>
+                </p>
+                <p>
+                  <span>⭐️</span>
+                  <span>{avgImdbRating}</span>
+                </p>
+                <p>
+                  <span>🌟</span>
+                  <span>{avgUserRating}</span>
+                </p>
+                <p>
+                  <span>⏳</span>
+                  <span>{avgRuntime} min</span>
+                </p>
+              </div>
+            </div>
+
+            <ul className="list">
+              {watched.map((movie) => (
+                <li key={movie.imdbID}>
+                  <img src={movie.Poster} alt={`${movie.Title} poster`} />
+                  <h3>{movie.Title}</h3>
+                  <div>
+                    <p>
+                      <span>⭐️</span>
+                      <span>{movie.imdbRating}</span>
+                    </p>
+                    <p>
+                      <span>🌟</span>
+                      <span>{movie.userRating}</span>
+                    </p>
+                    <p>
+                      <span>⏳</span>
+                      <span>{movie.runtime} min</span>
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+      </div>
+    </main>
   );
 }
 
-function MakeOrder({ selectedMovie, onMakeOrder }) {
-  function handleSubmit(e) {
-    e.preventDefault();
-
-    onMakeOrder(e.value);
-  }
-
-  return (
-    selectedMovie && (
-      <form className="form-make-order" onSubmit={handleSubmit}>
-        <h2>Make order - {selectedMovie.name}</h2>
-        <p>Description</p>
-        <p>{selectedMovie.description}</p>
-        <label>Ticket's price</label>
-        <input type="text" value={selectedMovie.price} />
-        <button className="button">Order</button>
-      </form>
-    )
-  );
-}
-
-// D:\Из Торрента\The Ultimate React Course 2023 React, Redux & More\8. [Optional] Practice Project Eat-'N-Split
-// посмотреть 100-й видос, там он передает данные в дочерний компонент
+// D:\Из Торрента\The Ultimate React Course 2023 React, Redux & More\10. Thinking in React Components, Composition, and Reusability
+// 108 Splitting Components in Practice
+// 06:00
