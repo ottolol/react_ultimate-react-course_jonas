@@ -51,16 +51,16 @@ const tempWatchedData = [
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
-export default function App({ movies }) {
+export default function App() {
   return (
     <>
-      <NavBar movies={movies} />
+      <NavBar />
       <Main />
     </>
   );
 }
 
-function NavBar({ movies }) {
+function NavBar() {
   const [query, setQuery] = useState("");
 
   return (
@@ -77,7 +77,7 @@ function NavBar({ movies }) {
         onChange={(e) => setQuery(e.target.value)}
       />
       <p className="num-results">
-        Found <strong>{movies.length}</strong> results
+        Found <strong>X</strong> results
       </p>
     </nav>
   );
@@ -182,4 +182,4 @@ function Main() {
 
 // D:\Из Торрента\The Ultimate React Course 2023 React, Redux & More\10. Thinking in React Components, Composition, and Reusability
 // 108 Splitting Components in Practice
-// 06:00
+// 08:30
