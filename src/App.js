@@ -246,4 +246,4 @@ function WatchedMovie({ movie }) {
 }
 
 // D:\Из Торрента\The Ultimate React Course 2023 React, Redux & More\10. Thinking in React Components, Composition, and Reusability
-// 112 Fixing Prop Drilling With Composition And Building a Layout
+// 114 Passing Elements as Props Alternative to children
