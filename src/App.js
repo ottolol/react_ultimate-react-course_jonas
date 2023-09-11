@@ -244,6 +244,3 @@ function WatchedMovie({ movie }) {
     </li>
   );
 }
-
-// D:\Из Торрента\The Ultimate React Course 2023 React, Redux & More\10. Thinking in React Components, Composition, and Reusability
-// 114 Passing Elements as Props Alternative to children
