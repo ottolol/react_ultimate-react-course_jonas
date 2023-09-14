@@ -11,12 +11,14 @@ export default function StarRating({
   className = "",
   messages = [],
   defaultRating = 0,
+  onSetRating,
 }) {
   const [rating, setRating] = useState(defaultRating);
   const [tempRating, setTempRating] = useState(0);
 
   function handleRating(rating) {
     setRating(rating);
+    onSetRating(rating);
   }
 
   const textStyle = {
@@ -95,5 +97,4 @@ function Star({ onRate, full, onHoverIn, onHoverOut, color, size }) {
 }
 
 // D:\Из Торрента\The Ultimate React Course 2023 React, Redux & More\10. Thinking in React Components, Composition, and Reusability
-// 119 Improving Reusability With Props
-// 14:28
+// 120 PropTypes
