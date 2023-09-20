@@ -107,4 +107,4 @@ function DifferentContent() {
 }
 
 // D:\Из Торрента\The Ultimate React Course 2023 React, Redux & More\11. How React Works Behind the Scenes
-// 127 How Rendering Works The Render Phase
+// 128 How Rendering Works  The Commit Phase
