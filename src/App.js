@@ -46,7 +46,10 @@ function Tabbed({ content }) {
       </div>
 
       {activeTab <= 2 ? (
-        <TabContent item={content.at(activeTab)} />
+        <TabContent
+          item={content.at(activeTab)}
+          key={content.at(activeTab).summary}
+        />
       ) : (
         <DifferentContent />
       )}
@@ -107,4 +110,5 @@ function DifferentContent() {
 }
 
 // D:\Из Торрента\The Ultimate React Course 2023 React, Redux & More\11. How React Works Behind the Scenes
-// 128 How Rendering Works  The Commit Phase
+// 132 - done
+// 133 - next
