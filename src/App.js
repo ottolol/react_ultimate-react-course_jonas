@@ -329,6 +329,20 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     [selectedId]
   );
 
+  // Меняем title на странице на title выбранного фильма
+  useEffect(
+    function () {
+      if (!title) return;
+      document.title = `Movie | ${title}`;
+
+      // делаем очистку title страницы на дефолтный - usePopcorn
+      return function () {
+        document.title = "usePopcorn";
+      };
+    },
+    [title]
+  );
+
   return (
     <div className="details">
       {isLoading ? (
@@ -463,4 +477,4 @@ function WatchedMovie({ movie, onDeleteWatched }) {
 }
 
 // 12. Effects and Data Fetching
-// 151 next
+// 156 next
