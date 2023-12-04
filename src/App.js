@@ -55,7 +55,7 @@ const average = (arr) =>
 const KEY = "a0660f68";
 
 export default function App() {
-  const [query, setQuery] = useState("inception");
+  const [query, setQuery] = useState("");
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -119,6 +119,10 @@ export default function App() {
         return;
       }
 
+      // закрываем окно с выбранным фильмом, при введении нового названия в поисковую строку
+      handleCloseMovie();
+
+      // показываем найденный фильм
       fetchMovies();
 
       return function () {
@@ -322,6 +326,27 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     onCloseMovie();
   }
 
+  // возвращаемся в меню - список фильмов, при нажатии клавиши Escape
+  useEffect(
+    function () {
+      // функция callback, при нажатии на Escape, вызывает функция закрытия - onCloseMovie()
+      function callback(e) {
+        if (e.code === "Escape") {
+          onCloseMovie();
+        }
+      }
+
+      // подписывапемся на событие keydown
+      document.addEventListener("keydown", callback);
+
+      // отписывапемся от события keydown
+      return function () {
+        document.removeEventListener("keydown", callback);
+      };
+    },
+    [onCloseMovie]
+  );
+
   useEffect(
     function () {
       async function getMovieDetails() {
@@ -486,4 +511,4 @@ function WatchedMovie({ movie, onDeleteWatched }) {
 }
 
 // 12. Effects and Data Fetching
-// 156 next
+// 158 next
