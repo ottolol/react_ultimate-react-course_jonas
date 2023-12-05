@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./style.css";
 
-// `https://api.frankfurter.app/latest?amount=100&from=EUR&to=USD`
+// https://api.frankfurter.app/latest?amount=100&from=EUR&to=USD
 // docs - https://www.frankfurter.app/docs
 
 /*{
@@ -44,8 +44,26 @@ import "./style.css";
 */
 
 export default function App() {
+  const [data, setData] = useState([]);
+
+  async function fetchData() {
+    const response = await fetch("https://api.frankfurter.app/latest?");
+    const json = await response.json();
+    setData(json);
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  if (!data) {
+    return "Loading...";
+  }
+
   return (
     <div>
+      <p>{JSON.stringify(data.base)}</p>
+      <p>{JSON.stringify(data.rates.USD)}</p>
       <input type="text" />
       <select>
         <option value="USD">USD</option>
