@@ -45,16 +45,25 @@ import "./style.css";
 
 export default function App() {
   const [data, setData] = useState([]);
+  const [amount, setAmount] = useState();
 
   async function fetchData() {
-    const response = await fetch("https://api.frankfurter.app/latest?");
+    const response = await fetch(
+      `https://api.frankfurter.app/latest?amount=${amount}&from=EUR&to=USD`
+    );
     const json = await response.json();
     setData(json);
   }
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [amount]);
+  // useEffect(() => {
+  //   fetch(`https://api.frankfurter.app/latest?amount=100&from=EUR&to=USD`)
+  //     .then((res) => res.json())
+  //     .then((data) => setData(data));
+  //   console.log(data);
+  // }, [data, amount]);
 
   if (!data) {
     return "Loading...";
@@ -63,8 +72,11 @@ export default function App() {
   return (
     <div>
       <p>{JSON.stringify(data.base)}</p>
-      <p>{JSON.stringify(data.rates.USD)}</p>
-      <input type="text" />
+      <input
+        type="text"
+        value={amount}
+        onChange={(e) => setAmount(e.target.value)}
+      />
       <select>
         <option value="USD">USD</option>
         <option value="EUR">EUR</option>
@@ -77,7 +89,7 @@ export default function App() {
         <option value="CAD">CAD</option>
         <option value="INR">INR</option>
       </select>
-      <p>OUTPUT</p>
+      <p>Output: {JSON.stringify(data.rates)}</p>
     </div>
   );
 }
